@@ -1,0 +1,55 @@
+//create_profile.php 
+<html> 
+<body> 
+<form action="post_profile.php" method="POST">   
+<label>Name</label><input name="name">   
+<label>Age</label><input name="age">  
+<label>Country</label><input name="country">  
+</form> 
+</body> 
+</html>
+
+$name = $_POST['name'] ?? ""; 
+$age = $_POST['country'] ?? "";
+$country = $_POST['country'] ?? "";
+
+$input_values =  [  'name' => $name,  'age' => $age,  'country' => $country ]; 
+
+Class UserProfile 
+{   
+public function insert_profile($values) 
+{  
+$link =  mysqli_connect('127.0.0.1', 'username','password', 'databasename'); 
+$q = " INSERT INTO " . $this->table . " VALUES ( '".$values['name']."', '".$values['age'] . "' ,'".$values['country']. "')";    return mysqli_query($q);   
+}
+} 
+
+
+<?php
+require('class/userprofile.php');'
+//contains the class UserProfile into  
+$id = $_GET['id'] ?? 'No ID'; 
+//if id was a string, i.e. "No ID", this would go into the if block 
+if(is_numeric($id))
+{   
+$profile =  new UserProfile();  
+//get data from our database   
+$results =   $user->fetch_id($id); 
+if($results && $results->num_rows > 0  )
+{      while($obj = $results->fetch_object())    {           $name = $obj->name;           $age = $obj->age;        $country = $obj->country;     
+}        
+//display form with a hidden field containing the value of the ID ?>  
+<form action="post_update_profile.php" method="post">    
+<label>Name</label><input name="name" value="<?=$name?>">  
+<label>Age</label><input name="age" value="<?=$age?>"> 
+<label>Country</label><input name="country" value="<?=country?>">  
+</form>    
+<?php         
+} else
+{         
+exit('No such user'); 
+}   
+} else 
+{   echo $id; //this  should be No ID';
+exit; 
+}   
