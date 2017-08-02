@@ -1,0 +1,209 @@
+FROM php:7 
+RUN pecl install ev-beta && \    
+docker-php-ext-enable ev 
+WORKDIR /opt/app 
+CMD ["/usr/local/bin/php", "server.php"] 
+$ docker build -t packt-chp6$ 
+docker run -d --name chat-app -v $PWD:/opt/app -p 8080:8080      
+packt-chp6
+{    
+"name": "packt-php7/chp6-chat",    
+"type": "project",    
+"authors": [{      
+"name": "Martin Helmich",   
+"email": "php7-book@martin-helmich.de" 
+}],    
+"require": {   
+"php": ">= 7.0.0",    
+"cboden/ratchet": "^0.3.4"     },   
+"autoload": {     
+"psr-4": {     
+"Packt\\Chp6": "src/"       
+}    
+}
+} 
+
+<?php require_once 'vendor/autoload.php';  
+$app = new \Ratchet\App('localhost', 8080, '0.0.0.0'); 
+$app->run()
+
+$ docker run --rm -v $PWD:/opt/app -p 8080:8080 packt-chp6
+
+$ npm install -g bower
+{    
+"name": "packt-php7/chp6-chat",    
+"authors": [    
+"Martin Helmich <php7-book@martin-helmich.de>"     ],     
+"private": true,   
+"dependencies":
+{         "bootstrap": "~3.3.6"  
+} 
+} 
+
+$ bower install
+$ docker run -d --name chat-web -v $PWD:/var/www -p 80:80 nginx
+
+namespace Packt\Chp6\Chat;  
+use Ratchet\MessageComponentInterface; 
+use Ratchet\ConnectionInterface;  
+class ChatComponent implements MessageComponentInterface 
+{    
+public function onOpen(ConnectionInterface $conn) {}    
+public function onClose(ConnectionInterface $conn) {}    
+public function onMessage(ConnectionInterface $from, $msg) {}  
+public function onError(ConnectionInterface $conn, \Exception $err) {} } 
+
+private $users;  
+public function __construct() 
+{     $this->users = new \SplObjectStorage();
+}
+
+public function onOpen(ConnectionInterface $conn)
+{     
+echo "user {$conn->remoteAddress} connected.\n"; 
+$this->users->attach($conn); 
+}  
+public function onClose(ConnectionInterface $conn) 
+{     
+echo "user {$conn->remoteAddress} disconnected.\n"; 
+$this->users->detach($conn);
+} 
+
+public function onMessage(ConnectionInterface $from, $msg) 
+{     
+echo "received message '$msg' from user {$from->remoteAddress}\n";  
+foreach($this->users as $user) 
+{        
+if ($user != $from) 
+{           
+$user->send($msg);   
+}    
+}
+
+$app = new \Ratchet\App('localhost', 8080, '0.0.0.0'); 
+$app->route('/chat', new \Packt\Chp6\Chat\ChatComponent); $app->run();
+
+<!DOCTYPE html>
+<html>  
+<head>    
+<title>Chat application</title> 
+<script src="bower_components/jquery/dist/jquery.min.js"></script>   
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>  
+<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>  
+</head>  
+<body>  
+</body> 
+</html>
+
+<head>  
+<title>Chat application</title>  
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>   
+<script src="js/app.js"></script>  
+<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+</head> 
+
+<div class="container">  
+<div class="row">   
+<div class="col-md-12">    
+<div class="input-group">   
+<input class="form-control" type="text" id="message"  placeholder="Your message..." /> 
+<span class="input-group-btn">         
+<button id="submit" class="btn btn-primary">Send</button>    
+</span>   
+</div>     
+</div>  
+</div>   
+<div class="row">   
+<div id="messages"></div> 
+</div>
+</div> 
+
+var connection = new WebSocket('ws://localhost:8080/chat');
+
+connection.onopen = function()
+{     
+console.log('connection established');
+}  
+connection.onclose = function()
+{     
+console.log('connection closed'); 
+}  
+connection.onmessage = function(event) 
+{     console.log('message received: ' + event.data); 
+} 
+
+var appendMessage = function(message, sentByMe)
+{    
+var text = sentByMe ? 'Sent at' : 'Received at';   
+var html = $('<div class="msg">' + text + ' <span class="date"></span>: <span     class="text"></span></div>');  
+html.find('.date').text(new Date().toLocaleTimeString());  
+html.find('.text').text(message);   
+$('#messages').prepend(html); 
+} 
+
+connection.onmessage = function(event)
+{    
+console.log('message received: ' + event.data); 
+appendMessage(event.data, false); 
+} 
+
+$(document).ready(function()
+{     
+$('#submit').click(function() 
+{        
+var message = $('#message').val();  
+if (message) 
+{       
+console.log('sending message: "' + message + '"');     
+connection.send(message);       
+appendMessage(message, true);  
+}   
+}); 
+}); 
+
+connection.onclose = function(event) 
+{     
+console.error(e);  
+setTimeout(function() 
+{        
+connection = new WebSocket('ws://localhost:8080/chat');  
+}, 5000);
+} 
+
+var interval;
+connection.onopen = function()
+{    
+console.log('connection established');   
+interval = setInterval(function()
+{       
+connection.send('ping'); 
+}, 120000); 
+}  
+connection.onclose = function()
+{     
+console.error(e);   
+clearInterval(interval);   
+setTimeout(function()
+{         
+connection = new WebSocket('ws://localhost:8080/chat');  
+}, 5000); 
+} 
+
+public function onMessage(ConnectionInterface $from, $msg) 
+{    
+if ($msg == 'ping')
+{       
+return;  
+}      
+echo "received message '$msg' from user {$from->remoteAddress}\n";  
+foreach($this->users as $user) 
+{        
+if ($user != $from)
+{            
+$user->send($msg); 
+}    
+} 
+} 
+enjoy ! by great milad
+}
