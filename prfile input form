@@ -35,7 +35,7 @@ if(is_numeric($id))
 $profile =  new UserProfile();  
 //get data from our database   
 $results =   $user->fetch_id($id); 
-if($results && $results->num_rows > 0  )
+if($results && $results->num_rows > 0  ) 
 {      while($obj = $results->fetch_object())    {           $name = $obj->name;           $age = $obj->age;        $country = $obj->country;     
 }        
 //display form with a hidden field containing the value of the ID ?>  
